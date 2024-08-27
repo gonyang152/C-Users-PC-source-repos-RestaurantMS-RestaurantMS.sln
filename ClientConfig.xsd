@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="dataCacheClient">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="localCache" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="isEnabled" type="xs:boolean" use="optional" />
+            <xs:attribute name="sync" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="NotificationBased" />
+                  <xs:enumeration value="TimeoutBased" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="ttlValue" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="objectCount" type="xs:unsignedLong" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="clientNotification" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="pollInterval" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="maxQueueLength" type="xs:unsignedInt" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="hosts" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="host">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" use="required" />
+                  <xs:attribute name="cachePort" use="required" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:unsignedShort">
+                        <xs:minInclusive value ="1024" />
+                        <xs:maxInclusive value="65535" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="transportProperties" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="maxBufferPoolSize" type="xs:unsignedLong" use="optional" />
+            <xs:attribute name="maxBufferSize" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="connectionBufferSize" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="channelInitializationTimeout" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="maxOutputDelay" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="receiveTimeout" type="xs:unsignedInt" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="securityProperties" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="messageSecurity" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="authorizationInfo" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="mode" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="None" />
+                  <xs:enumeration value="Transport" />
+                  <xs:enumeration value="Message" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="protectionLevel" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="None" />
+                  <xs:enumeration value="Sign" />
+                  <xs:enumeration value="EncryptAndSign" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="sslEnabled" type="xs:boolean" use="optional" />
+            <xs:attribute name="sslSubjectIdentity" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tracing" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="sinkType" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="EtwSink" />
+                  <xs:enumeration value="DiagnosticSink" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="traceLevel" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Off" />
+                  <xs:enumeration value="Error" />
+                  <xs:enumeration value="Warning" />
+                  <xs:enumeration value="Info" />
+                  <xs:enumeration value="Verbose" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="serializationProperties" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="serializer" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="NetDataContractSerializer" />
+                  <xs:enumeration value="BinaryFormatter" />
+                  <xs:enumeration value="CustomSerializer" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="customSerializerType" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="cacheReadyRetryPolicy" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="retryCount" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="maximumRetryIntervalInSeconds" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                  <xs:minInclusive value="1" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="autoDiscover" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="isEnabled" type="xs:boolean" use="optional" />
+            <xs:attribute name="identifier" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="^((?!\[cache cluster role name\])(?!\[server role name goes here\]).)*$" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute name="connectionPool" type="xs:boolean" use="optional" />
+      <xs:attribute name="requestTimeout" type="xs:unsignedInt" use="optional" />
+      <xs:attribute name="isCompressionEnabled" type="xs:boolean" use="optional" />
+      <xs:attribute name="maxConnectionsToServer" use="optional" >
+        <xs:simpleType>
+          <xs:restriction base="xs:unsignedInt">
+            <xs:maxInclusive value="100" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="channelOpenTimeout" use="optional" >
+        <xs:simpleType>
+          <xs:restriction base="xs:unsignedInt">
+            <xs:maxInclusive value="20000" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="useLegacyProtocol" type="xs:boolean" use="optional" />
+      <xs:attribute name="dataCacheServiceAccountType" use="optional" >
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="SystemAccount" />
+            <xs:enumeration value="DomainAccount" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dataCacheClients">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="dataCacheClient" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="localCache" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="isEnabled" type="xs:boolean" use="optional" />
+                  <xs:attribute name="sync" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="NotificationBased" />
+                        <xs:enumeration value="TimeoutBased" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ttlValue" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="objectCount" type="xs:unsignedLong" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="clientNotification" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="pollInterval" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="maxQueueLength" type="xs:unsignedInt" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="hosts" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="host">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="cachePort" use="required" >
+                          <xs:simpleType>
+                            <xs:restriction base="xs:unsignedShort">
+                              <xs:minInclusive value ="1024" />
+                              <xs:maxInclusive value="65535" />
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="transportProperties" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="maxBufferPoolSize" type="xs:unsignedLong" use="optional" />
+                  <xs:attribute name="maxBufferSize" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="connectionBufferSize" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="channelInitializationTimeout" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="maxOutputDelay" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="receiveTimeout" type="xs:unsignedInt" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="securityProperties" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="messageSecurity" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:attribute name="authorizationInfo" type="xs:string" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="mode" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="None" />
+                        <xs:enumeration value="Transport" />
+                        <xs:enumeration value="Message" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="protectionLevel" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="None" />
+                        <xs:enumeration value="Sign" />
+                        <xs:enumeration value="EncryptAndSign" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="sslEnabled" type="xs:boolean" use="optional" />
+                  <xs:attribute name="sslSubjectIdentity" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="tracing" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="sinkType" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="EtwSink" />
+                        <xs:enumeration value="DiagnosticSink" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="traceLevel" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="Off" />
+                        <xs:enumeration value="Error" />
+                        <xs:enumeration value="Warning" />
+                        <xs:enumeration value="Info" />
+                        <xs:enumeration value="Verbose" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="serializationProperties" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="serializer" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="NetDataContractSerializer" />
+                        <xs:enumeration value="BinaryFormatter" />
+                        <xs:enumeration value="CustomSerializer" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="customSerializerType" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="cacheReadyRetryPolicy" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="retryCount" type="xs:unsignedInt" use="optional" />
+                  <xs:attribute name="maximumRetryIntervalInSeconds" use="optional" >
+                    <xs:simpleType>
+                      <xs:restriction base="xs:unsignedInt">
+                        <xs:minInclusive value="1" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="autoDiscover" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="isEnabled" type="xs:boolean" use="optional" />
+                  <xs:attribute name="identifier" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="^((?!\[cache cluster role name\])(?!\[server role name goes here\]).)*$" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="connectionPool" type="xs:boolean" use="optional" />
+            <xs:attribute name="requestTimeout" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="isCompressionEnabled" type="xs:boolean" use="optional" />
+            <xs:attribute name="maxConnectionsToServer" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                  <xs:maxInclusive value="100" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="channelOpenTimeout" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:unsignedInt">
+                  <xs:maxInclusive value="20000" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="useLegacyProtocol" type="xs:boolean" use="optional" />
+            <xs:attribute name="dataCacheServiceAccountType" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="SystemAccount" />
+                  <xs:enumeration value="DomainAccount" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tracing" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="sinkType" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="EtwSink" />
+                  <xs:enumeration value="DiagnosticSink" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="traceLevel" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Off" />
+                  <xs:enumeration value="Error" />
+                  <xs:enumeration value="Warning" />
+                  <xs:enumeration value="Info" />
+                  <xs:enumeration value="Verbose" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="cacheDiagnostics">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="crashDump" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="dumpLevel" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Off" />
+                  <xs:enumeration value="Mini" />
+                  <xs:enumeration value="Full" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="compressDumps" type="xs:boolean" use="optional" />
+            <xs:attribute name="dumpStorageQuotaInMB" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="scheduledTransferPeriodInMinutes" type="xs:unsignedInt" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="cacheLogs" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute name="logLevel" use="optional" >
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="OFF" />
+                  <xs:enumeration value="ERROR" />
+                  <xs:enumeration value="WARNING" />
+                  <xs:enumeration value="INFO" />
+                  <xs:enumeration value="VERBOSE" />
+                  <xs:enumeration value="WARNINGWITHFAILEDREQ" />
+                  <xs:enumeration value="INFOWITHALLREQ" />
+                  <xs:enumeration value="NOBUFFERING" />
+                  <xs:enumeration value="WARNINGWITHFAILEDREQEXT" />
+                  <xs:enumeration value="INFOWITHALLREQLITE" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="logStorageQuotaInMB" type="xs:unsignedInt" use="optional" />
+            <xs:attribute name="scheduledTransferPeriodInMinutes" type="xs:unsignedInt" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
